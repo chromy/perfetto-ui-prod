@@ -9362,95 +9362,6 @@ var perfetto = (function (exports) {
 	var globals_1 = globals.gState;
 	var globals_2 = globals.gEngines;
 
-	var pages = createCommonjsModule(function (module, exports) {
-	// Copyright (C) 2018 The Android Open Source Project
-	//
-	// Licensed under the Apache License, Version 2.0 (the "License");
-	// you may not use this file except in compliance with the License.
-	// You may obtain a copy of the License at
-	//
-	//      http://www.apache.org/licenses/LICENSE-2.0
-	//
-	// Unless required by applicable law or agreed to in writing, software
-	// distributed under the License is distributed on an "AS IS" BASIS,
-	// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	// See the License for the specific language governing permissions and
-	// limitations under the License.
-	Object.defineProperty(exports, "__esModule", { value: true });
-
-	const Nav = {
-	    view() {
-	        return mithril('nav', mithril('ul', mithril('li', mithril('a[href=/]', { oncreate: mithril.route.link }, 'Home')), mithril('li', mithril('a[href=/viewer]', { oncreate: mithril.route.link }, 'Viewer'))));
-	    }
-	};
-	/**
-	 * Wrap component with common UI elements (nav bar etc).
-	 */
-	function createPage(component) {
-	    return {
-	        view() {
-	            return [
-	                mithril(Nav),
-	                mithril(component),
-	            ];
-	        },
-	    };
-	}
-	exports.createPage = createPage;
-
-	});
-
-	unwrapExports(pages);
-	var pages_1 = pages.createPage;
-
-	var home_page = createCommonjsModule(function (module, exports) {
-	// Copyright (C) 2018 The Android Open Source Project
-	//
-	// Licensed under the Apache License, Version 2.0 (the "License");
-	// you may not use this file except in compliance with the License.
-	// You may obtain a copy of the License at
-	//
-	//      http://www.apache.org/licenses/LICENSE-2.0
-	//
-	// Unless required by applicable law or agreed to in writing, software
-	// distributed under the License is distributed on an "AS IS" BASIS,
-	// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	// See the License for the specific language governing permissions and
-	// limitations under the License.
-	Object.defineProperty(exports, "__esModule", { value: true });
-
-
-
-
-	function extractBlob(e) {
-	    if (!(e.target instanceof HTMLInputElement)) {
-	        throw new Error('Not input element');
-	    }
-	    if (!e.target.files)
-	        return null;
-	    return e.target.files.item(0);
-	}
-	exports.HomePage = pages.createPage({
-	    view() {
-	        return mithril('.home-page', mithril('.home-page-title', 'Perfetto'), mithril('.home-page-controls', mithril('label.file-input', mithril('input[type=file]', {
-	            onchange: (e) => {
-	                const blob = extractBlob(e);
-	                if (!blob)
-	                    return;
-	                globals.gEngines.set('0', wasm_engine_proxy.WasmEngineProxy.create(blob));
-	                mithril.route.set('/query/0');
-	            },
-	        }), 'Load trace'), ' or ', mithril('button', {
-	            disabled: true,
-	        }, 'Open demo trace')));
-	    }
-	});
-
-	});
-
-	unwrapExports(home_page);
-	var home_page_1 = home_page.HomePage;
-
 	/*! *****************************************************************************
 	Copyright (c) Microsoft Corporation. All rights reserved.
 	Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -9658,6 +9569,105 @@ var perfetto = (function (exports) {
 		__importStar: __importStar,
 		__importDefault: __importDefault
 	});
+
+	var pages = createCommonjsModule(function (module, exports) {
+	// Copyright (C) 2018 The Android Open Source Project
+	//
+	// Licensed under the Apache License, Version 2.0 (the "License");
+	// you may not use this file except in compliance with the License.
+	// You may obtain a copy of the License at
+	//
+	//      http://www.apache.org/licenses/LICENSE-2.0
+	//
+	// Unless required by applicable law or agreed to in writing, software
+	// distributed under the License is distributed on an "AS IS" BASIS,
+	// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	// See the License for the specific language governing permissions and
+	// limitations under the License.
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	const Nav = {
+	    view() {
+	        return mithril('nav', mithril('ul', mithril('li', mithril('a[href=/]', { oncreate: mithril.route.link }, 'Home')), mithril('li', mithril('a[href=/viewer]', { oncreate: mithril.route.link }, 'Viewer'))));
+	    }
+	};
+	/**
+	 * Wrap component with common UI elements (nav bar etc).
+	 */
+	function createPage(component) {
+	    return {
+	        view() {
+	            return [
+	                mithril(Nav),
+	                mithril(component),
+	            ];
+	        },
+	    };
+	}
+	exports.createPage = createPage;
+
+	});
+
+	unwrapExports(pages);
+	var pages_1 = pages.createPage;
+
+	var home_page = createCommonjsModule(function (module, exports) {
+	// Copyright (C) 2018 The Android Open Source Project
+	//
+	// Licensed under the Apache License, Version 2.0 (the "License");
+	// you may not use this file except in compliance with the License.
+	// You may obtain a copy of the License at
+	//
+	//      http://www.apache.org/licenses/LICENSE-2.0
+	//
+	// Unless required by applicable law or agreed to in writing, software
+	// distributed under the License is distributed on an "AS IS" BASIS,
+	// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	// See the License for the specific language governing permissions and
+	// limitations under the License.
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+
+
+
+
+	function extractBlob(e) {
+	    if (!(e.target instanceof HTMLInputElement)) {
+	        throw new Error('Not input element');
+	    }
+	    if (!e.target.files)
+	        return null;
+	    return e.target.files.item(0);
+	}
+	function loadExampleTrace() {
+	    return tslib_es6.__awaiter(this, void 0, void 0, function* () {
+	        const url = 'https://storage.googleapis.com/perfetto-misc/example_trace';
+	        const repsonse = yield fetch(url);
+	        const blob = yield repsonse.blob();
+	        globals.gEngines.set('0', wasm_engine_proxy.WasmEngineProxy.create(blob));
+	        mithril.route.set('/query/0');
+	    });
+	}
+	exports.HomePage = pages.createPage({
+	    view() {
+	        return mithril('.home-page', mithril('.home-page-title', 'Perfetto'), mithril('.home-page-controls', mithril('label.file-input', mithril('input[type=file]', {
+	            onchange: (e) => {
+	                const blob = extractBlob(e);
+	                if (!blob)
+	                    return;
+	                globals.gEngines.set('0', wasm_engine_proxy.WasmEngineProxy.create(blob));
+	                mithril.route.set('/query/0');
+	            },
+	        }), 'Load trace'), ' or ', mithril('button', {
+	            onclick: loadExampleTrace,
+	        }, 'Open demo trace')));
+	    }
+	});
+
+	});
+
+	unwrapExports(home_page);
+	var home_page_1 = home_page.HomePage;
 
 	var query_page = createCommonjsModule(function (module, exports) {
 	// Copyright (C) 2018 The Android Open Source Project
