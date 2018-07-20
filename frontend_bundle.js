@@ -9085,7 +9085,7 @@ var perfetto = (function (exports) {
 	var wasm_engine_proxy_1 = wasm_engine_proxy.warmupWasmEngineWorker;
 	var wasm_engine_proxy_2 = wasm_engine_proxy.WasmEngineProxy;
 
-	var track_canvas_context = createCommonjsModule(function (module, exports) {
+	var virtual_canvas_context = createCommonjsModule(function (module, exports) {
 	// Copyright (C) 2018 The Android Open Source Project
 	//
 	// Licensed under the Apache License, Version 2.0 (the "License");
@@ -9100,46 +9100,67 @@ var perfetto = (function (exports) {
 	// See the License for the specific language governing permissions and
 	// limitations under the License.
 	Object.defineProperty(exports, "__esModule", { value: true });
-	class TrackCanvasContext {
-	    constructor(ctx, rect) {
+	/**
+	 * VirtualCanvasContext is similar to a CanvasRenderingContext2D object, with
+	 * knowledge of where it is positioned relative to the parent rendering context.
+	 * The parent rendering context is either another VirtualRenderingContext, or a
+	 * real CanvasRenderingContext2D.
+	 *
+	 * It implements a subset of the CanvasRenderingContext2D API, but it translates
+	 * all the coordinates to the parent context's coordinate space by applying
+	 * appropriate offsets. The user of this context can thus assume a local
+	 * coordinate space of (0, 0, width, height). In addition, VirtualCanvasContexts
+	 * performs strict bounds checking on some drawing, and it allows the user to
+	 * to query if the virtual context is on the (eventual) backing real canvas, so
+	 * the user can avoid executing unnecessary drawing logic.
+	 */
+	class VirtualCanvasContext {
+	    constructor(ctx) {
 	        this.ctx = ctx;
-	        this.rect = rect;
 	        this.stroke = this.ctx.stroke.bind(this.ctx);
 	        this.beginPath = this.ctx.beginPath.bind(this.ctx);
 	        this.closePath = this.ctx.closePath.bind(this.ctx);
 	        this.measureText = this.ctx.measureText.bind(this.ctx);
 	    }
 	    fillRect(x, y, width, height) {
-	        if (x < 0 || x + width > this.rect.width || y < 0 ||
-	            y + height > this.rect.height) {
-	            throw new OutOfBoundsDrawingError('draw a rect', { x, y, width, height }, this.rect);
+	        if (x < 0 || x + width > this.getBoundingRect().width || y < 0 ||
+	            y + height > this.getBoundingRect().height) {
+	            throw new OutOfBoundsDrawingError('draw a rect', { x, y, width, height }, this.getBoundingRect());
 	        }
-	        this.ctx.fillRect(x + this.rect.left, y + this.rect.top, width, height);
-	    }
-	    setDimensions(width, height) {
-	        this.rect.width = width;
-	        this.rect.height = height;
-	    }
-	    setYOffset(offset) {
-	        this.rect.top = offset;
+	        if (!this.isOnCanvas()) {
+	            throw new ContextNotOnCanvasError();
+	        }
+	        this.ctx.fillRect(x + this.getBoundingRect().x, y + this.getBoundingRect().y, width, height);
 	    }
 	    moveTo(x, y) {
-	        if (x < 0 || x > this.rect.width || y < 0 || y > this.rect.height) {
-	            throw new OutOfBoundsDrawingError('moveto', { x, y }, this.rect);
+	        if (x < 0 || x > this.getBoundingRect().width || y < 0 ||
+	            y > this.getBoundingRect().height) {
+	            throw new OutOfBoundsDrawingError('moveto', { x, y }, this.getBoundingRect());
 	        }
-	        this.ctx.moveTo(x + this.rect.left, y + this.rect.top);
+	        if (!this.isOnCanvas()) {
+	            throw new ContextNotOnCanvasError();
+	        }
+	        this.ctx.moveTo(x + this.getBoundingRect().x, y + this.getBoundingRect().y);
 	    }
 	    lineTo(x, y) {
-	        if (x < 0 || x > this.rect.width || y < 0 || y > this.rect.height) {
-	            throw new OutOfBoundsDrawingError('lineto', { x, y }, this.rect);
+	        if (x < 0 || x > this.getBoundingRect().width || y < 0 ||
+	            y > this.getBoundingRect().height) {
+	            throw new OutOfBoundsDrawingError('lineto', { x, y }, this.getBoundingRect());
 	        }
-	        this.ctx.lineTo(x + this.rect.left, y + this.rect.top);
+	        if (!this.isOnCanvas()) {
+	            throw new ContextNotOnCanvasError();
+	        }
+	        this.ctx.lineTo(x + this.getBoundingRect().x, y + this.getBoundingRect().y);
 	    }
 	    fillText(text, x, y) {
-	        if (x < 0 || x > this.rect.width || y < 0 || y > this.rect.height) {
-	            throw new OutOfBoundsDrawingError('draw text', { x, y }, this.rect);
+	        if (x < 0 || x > this.getBoundingRect().width || y < 0 ||
+	            y > this.getBoundingRect().height) {
+	            throw new OutOfBoundsDrawingError('draw text', { x, y }, this.getBoundingRect());
 	        }
-	        this.ctx.fillText(text, x + this.rect.left, y + this.rect.top);
+	        if (!this.isOnCanvas()) {
+	            throw new ContextNotOnCanvasError();
+	        }
+	        this.ctx.fillText(text, x + this.getBoundingRect().x, y + this.getBoundingRect().y);
 	    }
 	    set strokeStyle(v) {
 	        this.ctx.strokeStyle = v;
@@ -9154,20 +9175,102 @@ var perfetto = (function (exports) {
 	        this.ctx.font = fontString;
 	    }
 	}
-	exports.TrackCanvasContext = TrackCanvasContext;
+	exports.VirtualCanvasContext = VirtualCanvasContext;
 	class OutOfBoundsDrawingError extends Error {
-	    constructor(action, drawing, bounds) {
+	    constructor(action, drawing, boundingRect) {
 	        super(`Attempted to ${action} (${JSON.stringify(drawing)})` +
-	            `in bounds ${JSON.stringify(bounds)}`);
+	            `in bounds ${JSON.stringify(boundingRect)}`);
 	    }
 	}
 	exports.OutOfBoundsDrawingError = OutOfBoundsDrawingError;
+	class ContextNotOnCanvasError extends Error {
+	    constructor() {
+	        super(`Attempted to draw on a virtual context that is not on the canvas. ` +
+	            `Did you check virtualContext.isOnCanvas()?`);
+	    }
+	}
+	exports.ContextNotOnCanvasError = ContextNotOnCanvasError;
 
 	});
 
-	unwrapExports(track_canvas_context);
-	var track_canvas_context_1 = track_canvas_context.TrackCanvasContext;
-	var track_canvas_context_2 = track_canvas_context.OutOfBoundsDrawingError;
+	unwrapExports(virtual_canvas_context);
+	var virtual_canvas_context_1 = virtual_canvas_context.VirtualCanvasContext;
+	var virtual_canvas_context_2 = virtual_canvas_context.OutOfBoundsDrawingError;
+	var virtual_canvas_context_3 = virtual_canvas_context.ContextNotOnCanvasError;
+
+	var root_virtual_context = createCommonjsModule(function (module, exports) {
+	// Copyright (C) 2018 The Android Open Source Project
+	//
+	// Licensed under the Apache License, Version 2.0 (the "License");
+	// you may not use this file except in compliance with the License.
+	// You may obtain a copy of the License at
+	//
+	//      http://www.apache.org/licenses/LICENSE-2.0
+	//
+	// Unless required by applicable law or agreed to in writing, software
+	// distributed under the License is distributed on an "AS IS" BASIS,
+	// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	// See the License for the specific language governing permissions and
+	// limitations under the License.
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	/**
+	 * RootVirtualContext is a VirtualCanvasContext that has knowledge of the
+	 * actual canvas element and the scroll position, which it can use to determine
+	 * whether any rect is within the canvas. ChildVirtualContexts can use this to
+	 * determine whether they should execute their draw calls.
+	 */
+	class RootVirtualContext extends virtual_canvas_context.VirtualCanvasContext {
+	    constructor(context) {
+	        super(context);
+	        this.boundingRect = { x: 0, y: 0, width: 0, height: 0 };
+	        this.canvasWidth = 0;
+	        this.canvasHeight = 0;
+	        this.canvasTopOffset = 0;
+	        this.updateBoundingRect();
+	    }
+	    isOnCanvas() {
+	        return this.checkRectOnCanvas(this.getBoundingRect());
+	    }
+	    checkRectOnCanvas(boundingRect) {
+	        const canvasBottom = this.canvasTopOffset + this.canvasHeight;
+	        const rectBottom = boundingRect.y + boundingRect.height;
+	        const rectRight = boundingRect.x + boundingRect.width;
+	        const heightIntersects = boundingRect.y <= canvasBottom && rectBottom >= this.canvasTopOffset;
+	        const widthIntersects = boundingRect.x <= this.canvasWidth && rectRight >= 0;
+	        return heightIntersects && widthIntersects;
+	    }
+	    /**
+	     * This defines a BoundingRect that causes correct positioning of the context
+	     * contents due to the scroll position, without causing bounds checking.
+	     */
+	    updateBoundingRect() {
+	        this.boundingRect = {
+	            // As the user scrolls down, the contents have to move up.
+	            y: this.canvasTopOffset * -1,
+	            x: 0,
+	            width: Infinity,
+	            height: Infinity
+	        };
+	    }
+	    setCanvasTopOffset(topOffset) {
+	        this.canvasTopOffset = topOffset;
+	        this.updateBoundingRect();
+	    }
+	    setCanvasSize(canvasWidth, canvasHeight) {
+	        this.canvasWidth = canvasWidth;
+	        this.canvasHeight = canvasHeight;
+	    }
+	    getBoundingRect() {
+	        return this.boundingRect;
+	    }
+	}
+	exports.RootVirtualContext = RootVirtualContext;
+
+	});
+
+	unwrapExports(root_virtual_context);
+	var root_virtual_context_1 = root_virtual_context.RootVirtualContext;
 
 	var canvas_controller = createCommonjsModule(function (module, exports) {
 	// Copyright (C) 2018 The Android Open Source Project
@@ -9193,37 +9296,40 @@ var perfetto = (function (exports) {
 	 * and through the virtual context behaves like (width, Inf).
 	 */
 	class CanvasController {
-	    constructor(width, height) {
-	        this.width = width;
-	        this.height = height;
+	    constructor() {
 	        this.scrollOffset = 0;
+	        // Number of additional pixels above/below for compositor scrolling.
+	        this.extraHeightPerSide = 0;
+	        this.canvasHeight = 0;
+	        this.canvasWidth = 0;
 	        this.canvas = document.createElement('canvas');
-	        this.canvasHeight = this.height * CANVAS_OVERDRAW_FACTOR;
-	        this.extraHeightPerSide = Math.round((this.canvasHeight - this.height) / 2);
-	        const dpr = window.devicePixelRatio;
-	        this.canvas.style.width = this.width.toString() + 'px';
-	        this.canvas.style.height = this.canvasHeight.toString() + 'px';
-	        this.canvas.width = this.width * dpr;
-	        this.canvas.height = this.canvasHeight * dpr;
 	        const ctx = this.canvas.getContext('2d');
 	        if (!ctx) {
 	            throw new Error('Could not create canvas context');
 	        }
-	        ctx.scale(dpr, dpr);
 	        this.ctx = ctx;
-	        this.rootTrackContext = new track_canvas_context.TrackCanvasContext(this.ctx, {
-	            left: 0,
-	            top: this.extraHeightPerSide,
-	            width: this.width,
-	            height: Number.MAX_SAFE_INTEGER // The top context should not clip.
-	        });
+	        this.rootVirtualContext = new root_virtual_context.RootVirtualContext(this.ctx);
+	    }
+	    setDimensions(width, visibleCanvasHeight) {
+	        this.canvasWidth = width;
+	        this.canvasHeight = visibleCanvasHeight * CANVAS_OVERDRAW_FACTOR;
+	        this.extraHeightPerSide =
+	            Math.round((this.canvasHeight - visibleCanvasHeight) / 2);
+	        const dpr = window.devicePixelRatio;
+	        this.canvas.style.width = this.canvasWidth.toString() + 'px';
+	        this.canvas.style.height = this.canvasHeight.toString() + 'px';
+	        this.canvas.width = this.canvasWidth * dpr;
+	        this.canvas.height = this.canvasHeight * dpr;
+	        this.ctx.scale(dpr, dpr);
+	        this.rootVirtualContext.setCanvasTopOffset(this.getCanvasTopOffset());
+	        this.rootVirtualContext.setCanvasSize(this.canvasWidth, this.canvasHeight);
 	    }
 	    clear() {
 	        this.ctx.fillStyle = 'white';
-	        this.ctx.fillRect(0, 0, this.width, this.canvasHeight);
+	        this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
 	    }
 	    getContext() {
-	        return this.rootTrackContext;
+	        return this.rootVirtualContext;
 	    }
 	    getCanvasElement() {
 	        return this.canvas;
@@ -9236,7 +9342,7 @@ var perfetto = (function (exports) {
 	     */
 	    updateScrollOffset(scrollOffset) {
 	        this.scrollOffset = scrollOffset;
-	        this.rootTrackContext.setYOffset(-1 * this.getCanvasTopOffset());
+	        this.rootVirtualContext.setCanvasTopOffset(this.getCanvasTopOffset());
 	    }
 	    getCanvasTopOffset() {
 	        return this.scrollOffset - this.extraHeightPerSide;
@@ -9270,6 +9376,7 @@ var perfetto = (function (exports) {
 	        return mithril('.canvasWrapper', {
 	            style: {
 	                position: 'absolute',
+	                left: '200px',
 	                top: attrs.topOffset.toString() + 'px',
 	                overflow: 'none',
 	            }
@@ -9285,7 +9392,7 @@ var perfetto = (function (exports) {
 	unwrapExports(canvas_wrapper);
 	var canvas_wrapper_1 = canvas_wrapper.CanvasWrapper;
 
-	var global$1 = createCommonjsModule(function (module, exports) {
+	var child_virtual_context = createCommonjsModule(function (module, exports) {
 	// Copyright (C) 2018 The Android Open Source Project
 	//
 	// Licensed under the Apache License, Version 2.0 (the "License");
@@ -9300,38 +9407,41 @@ var perfetto = (function (exports) {
 	// See the License for the specific language governing permissions and
 	// limitations under the License.
 	Object.defineProperty(exports, "__esModule", { value: true });
+
 	/**
-	 * A holder for a global variable.
-	 * This achieves similar goals to a singleton (the whole codebase can
-	 * access the same instance of a class) without some of the features/downsides
-	 * of a singleton, namely:
-	 * - The functionality isn't built into the class.
-	 * - Since initalization isn't lazy it must be done explicity which is easier
-	 *   to reason about.
+	 * ChildVirtualContext is a VirtualCanvasContext that is a child of another
+	 * VirtualCanvasContext. A ChildVirtualContext has a boundingRect within the
+	 * parent context, and uses this to determine whether it is currently on the
+	 * canvas, hence disabling unnecessary draw calls. ChildVirtualContexts can be
+	 * nested, and their bounds are relative to one another.
 	 */
-	class Global {
-	    constructor() {
-	        this.value = null;
+	class ChildVirtualContext extends virtual_canvas_context.VirtualCanvasContext {
+	    constructor(parentCtx, boundingRect) {
+	        super(parentCtx);
+	        this.parentCtx = parentCtx;
+	        this.boundingRect = boundingRect;
 	    }
-	    get() {
-	        if (this.value === null) {
-	            throw new Error('Global not set');
-	        }
-	        return this.value;
+	    isOnCanvas() {
+	        return this.parentCtx.checkRectOnCanvas(this.boundingRect);
 	    }
-	    set(value) {
-	        this.value = value;
+	    checkRectOnCanvas(boundingRect) {
+	        return this.parentCtx.checkRectOnCanvas({
+	            y: boundingRect.y + this.boundingRect.y,
+	            x: boundingRect.x + this.boundingRect.x,
+	            width: boundingRect.width,
+	            height: boundingRect.height
+	        });
 	    }
-	    resetForTesting() {
-	        this.value = null;
+	    getBoundingRect() {
+	        return this.boundingRect;
 	    }
 	}
-	exports.Global = Global;
+	exports.ChildVirtualContext = ChildVirtualContext;
 
 	});
 
-	unwrapExports(global$1);
-	var global_1 = global$1.Global;
+	unwrapExports(child_virtual_context);
+	var child_virtual_context_1 = child_virtual_context.ChildVirtualContext;
 
 	var globals = createCommonjsModule(function (module, exports) {
 	// Copyright (C) 2018 The Android Open Source Project
@@ -9348,19 +9458,44 @@ var perfetto = (function (exports) {
 	// See the License for the specific language governing permissions and
 	// limitations under the License.
 	Object.defineProperty(exports, "__esModule", { value: true });
-
 	/**
-	 * Global accessor for the state in the frontend.
+	 * Global accessors for state/dispatch in the frontend.
 	 */
-	exports.gState = new global$1.Global();
+	class Globals {
+	    constructor() {
+	        this._dispatch = undefined;
+	        this._state = undefined;
+	    }
+	    get state() {
+	        if (this._state === undefined)
+	            throw new Error('Global not set');
+	        return this._state;
+	    }
+	    set state(value) {
+	        this._state = value;
+	    }
+	    get dispatch() {
+	        if (this._dispatch === undefined)
+	            throw new Error('Global not set');
+	        return this._dispatch;
+	    }
+	    set dispatch(value) {
+	        this._dispatch = value;
+	    }
+	    resetForTesting() {
+	        this._state = undefined;
+	        this._dispatch = undefined;
+	    }
+	}
 	// TODO(hjd): Temporary while bringing up controller worker.
 	exports.gEngines = new Map();
+	exports.globals = new Globals();
 
 	});
 
 	unwrapExports(globals);
-	var globals_1 = globals.gState;
-	var globals_2 = globals.gEngines;
+	var globals_1 = globals.gEngines;
+	var globals_2 = globals.globals;
 
 	/*! *****************************************************************************
 	Copyright (c) Microsoft Corporation. All rights reserved.
@@ -9570,6 +9705,54 @@ var perfetto = (function (exports) {
 		__importDefault: __importDefault
 	});
 
+	var mithril_helpers = createCommonjsModule(function (module, exports) {
+	// Copyright (C) 2018 The Android Open Source Project
+	//
+	// Licensed under the Apache License, Version 2.0 (the "License");
+	// you may not use this file except in compliance with the License.
+	// You may obtain a copy of the License at
+	//
+	//      http://www.apache.org/licenses/LICENSE-2.0
+	//
+	// Unless required by applicable law or agreed to in writing, software
+	// distributed under the License is distributed on an "AS IS" BASIS,
+	// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	// See the License for the specific language governing permissions and
+	// limitations under the License.
+	Object.defineProperty(exports, "__esModule", { value: true });
+
+	/**
+	 * Create a Mithril event handler which (when triggered) dispatches an action
+	 * to the controller thread without causing a Mithril redraw.
+	 * This prevents redrawing twice for every action (once immediately and once
+	 * when the state updates). This function is overloaded, it can either create a
+	 * handler which ignores the event entirely (via the (e: Event) overload) or
+	 * compute the Action from the Event (via the ((e: Event) => Action) overload.
+	 */
+	function quietDispatch(action) {
+	    if (action instanceof Function) {
+	        return quietHandler(event => globals.globals.dispatch(action(event)));
+	    }
+	    return quietHandler(_ => globals.globals.dispatch(action));
+	}
+	exports.quietDispatch = quietDispatch;
+	/**
+	 * Create a Mithril event handler which does not schedule a Mithril redraw.
+	 */
+	function quietHandler(handler) {
+	    return (event) => {
+	        event.redraw = false;
+	        handler(event);
+	    };
+	}
+	exports.quietHandler = quietHandler;
+
+	});
+
+	unwrapExports(mithril_helpers);
+	var mithril_helpers_1 = mithril_helpers.quietDispatch;
+	var mithril_helpers_2 = mithril_helpers.quietHandler;
+
 	var pages = createCommonjsModule(function (module, exports) {
 	// Copyright (C) 2018 The Android Open Source Project
 	//
@@ -9631,6 +9814,7 @@ var perfetto = (function (exports) {
 
 
 
+
 	function extractBlob(e) {
 	    if (!(e.target instanceof HTMLInputElement)) {
 	        throw new Error('Not input element');
@@ -9650,6 +9834,7 @@ var perfetto = (function (exports) {
 	}
 	exports.HomePage = pages.createPage({
 	    view() {
+	        const count = globals.globals.state.i;
 	        return mithril('.home-page', mithril('.home-page-title', 'Perfetto'), mithril('.home-page-controls', mithril('label.file-input', mithril('input[type=file]', {
 	            onchange: (e) => {
 	                const blob = extractBlob(e);
@@ -9658,9 +9843,7 @@ var perfetto = (function (exports) {
 	                globals.gEngines.set('0', wasm_engine_proxy.WasmEngineProxy.create(blob));
 	                mithril.route.set('/query/0');
 	            },
-	        }), 'Load trace'), ' or ', mithril('button', {
-	            onclick: loadExampleTrace,
-	        }, 'Open demo trace')));
+	        }), 'Load trace'), ' or ', mithril('button', { onclick: loadExampleTrace }, 'Open demo trace'), mithril('button', { onclick: mithril_helpers.quietDispatch({}) }, `Increment ${count}`)));
 	    }
 	});
 
@@ -9688,6 +9871,10 @@ var perfetto = (function (exports) {
 
 
 
+	// TODO(hjd): Something mangles unicode in strings – we should fix that.
+	// A –.
+	const EMDASH = '\u2014';
+	const MAX_DISPLAYED_ROWS = 1000;
 	const ExampleQueries = [
 	    { name: 'All sched slices', query: 'select * from sched;' },
 	    {
@@ -9695,7 +9882,7 @@ var perfetto = (function (exports) {
 	        query: 'select cpu, sum(dur)/1000/1000 as ms from sched group by cpu;'
 	    },
 	];
-	const Log = [];
+	const responses = [];
 	function doQuery(engine, query) {
 	    return tslib_es6.__awaiter(this, void 0, void 0, function* () {
 	        const start = performance.now();
@@ -9717,7 +9904,7 @@ var perfetto = (function (exports) {
 	        }
 	        const end = performance.now();
 	        log.durationMs = Math.round(end - start);
-	        Log.unshift(log);
+	        responses.unshift(log);
 	        mithril.redraw();
 	    });
 	}
@@ -9736,8 +9923,8 @@ var perfetto = (function (exports) {
 	        return 0;
 	    };
 	    const rows = result.numRecords;
-	    const rowsToDisplay = Math.min(+rows, 1000);
-	    return mithril('table', mithril('thead', mithril('tr', result.columnDescriptors.map(d => mithril('th', d.name)))), mithril('tbody', Array.from(Array.from({ length: rowsToDisplay }).keys()).map(i => {
+	    const rowsToDisplay = Math.min(+rows, MAX_DISPLAYED_ROWS);
+	    return mithril('table', mithril('thead', mithril('tr', result.columnDescriptors.map(d => mithril('th', d.name)))), mithril('tbody', [...Array.from({ length: rowsToDisplay }).keys()].map(i => {
 	        return mithril('tr', result.columns.map((c) => {
 	            return mithril('td', extract(c, i));
 	        }));
@@ -9770,16 +9957,27 @@ var perfetto = (function (exports) {
 	                    return;
 	                doQuery(engine, this.query);
 	            },
-	        }, mithril('input[placeholder=Query].query-input', {
+	        }, mithril('input.query-input', {
+	            placeholder: 'Query',
 	            disabled: !globals.gEngines.get('0'),
 	            oninput: mithril.withAttr('value', (q) => this.query = q),
 	            value: this.query,
 	        }), examples);
-	    }
+	    },
 	};
+	function createQueryResponse(entry) {
+	    const stats = [
+	        entry.rowCount > MAX_DISPLAYED_ROWS ?
+	            `first ${MAX_DISPLAYED_ROWS} of ${entry.rowCount} rows` :
+	            `${entry.rowCount} rows`,
+	        EMDASH,
+	        `${entry.durationMs} ms`,
+	    ].join(' ');
+	    return mithril('.query-log-entry', mithril('.query-log-entry-query', entry.query), mithril('.query-log-entry-stats', stats), mithril('.query-log-entry-result', table(entry.result)));
+	}
 	exports.QueryPage = pages.createPage({
 	    view() {
-	        return mithril('.query-page', mithril(QueryBox), Log.map((entry) => mithril('.query-log-entry', mithril('.query-log-entry-query', entry.query), mithril('.query-log-entry-stats', `${entry.rowCount} rows \u2014 ${entry.durationMs} ms`), mithril('.query-log-entry-result', table(entry.result)))));
+	        return mithril('.query-page', mithril(QueryBox), responses.map(createQueryResponse));
 	    }
 	});
 
@@ -9840,6 +10038,78 @@ var perfetto = (function (exports) {
 	unwrapExports(scrollable_container);
 	var scrollable_container_1 = scrollable_container.ScrollableContainer;
 
+	var time_scale = createCommonjsModule(function (module, exports) {
+	// Copyright (C) 2018 The Android Open Source Project
+	//
+	// Licensed under the Apache License, Version 2.0 (the "License");
+	// you may not use this file except in compliance with the License.
+	// You may obtain a copy of the License at
+	//
+	//      http://www.apache.org/licenses/LICENSE-2.0
+	//
+	// Unless required by applicable law or agreed to in writing, software
+	// distributed under the License is distributed on an "AS IS" BASIS,
+	// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	// See the License for the specific language governing permissions and
+	// limitations under the License.
+	Object.defineProperty(exports, "__esModule", { value: true });
+	/**
+	 * Defines a mapping between pixels and Milliseconds for the entire application.
+	 * Linearly scales time values from boundsMs to pixel values in boundsPx and
+	 * back.
+	 */
+	class TimeScale {
+	    constructor(boundsMs, boundsPx) {
+	        this.slopeMsPerPx = 0;
+	        this.startMs = boundsMs[0];
+	        this.endMs = boundsMs[1];
+	        this.startPx = boundsPx[0];
+	        this.endPx = boundsPx[1];
+	        this.updateSlope();
+	    }
+	    updateSlope() {
+	        this.slopeMsPerPx =
+	            (this.endMs - this.startMs) / (this.endPx - this.startPx);
+	    }
+	    msToPx(time) {
+	        return this.startPx + (time - this.startMs) / this.slopeMsPerPx;
+	    }
+	    pxToMs(px) {
+	        return this.startMs + (px - this.startPx) * this.slopeMsPerPx;
+	    }
+	    deltaPxToDurationMs(px) {
+	        return px * this.slopeMsPerPx;
+	    }
+	    setLimitsMs(tStart, tEnd) {
+	        this.startMs = tStart;
+	        this.endMs = tEnd;
+	        this.updateSlope();
+	    }
+	    setLimitsPx(pxStart, pxEnd) {
+	        this.startPx = pxStart;
+	        this.endPx = pxEnd;
+	        this.updateSlope();
+	    }
+	}
+	exports.TimeScale = TimeScale;
+	// We are using enums because TypeScript does proper type checking for those,
+	// and disallows assigning a pixel value to a milliseconds value, even though
+	// they are numbers. Using types, this safeguard would not be here.
+	// See: https://stackoverflow.com/a/43832165
+	var Pixels;
+	(function (Pixels) {
+	})(Pixels = exports.Pixels || (exports.Pixels = {}));
+	var Milliseconds;
+	(function (Milliseconds) {
+	})(Milliseconds = exports.Milliseconds || (exports.Milliseconds = {}));
+
+	});
+
+	unwrapExports(time_scale);
+	var time_scale_1 = time_scale.TimeScale;
+	var time_scale_2 = time_scale.Pixels;
+	var time_scale_3 = time_scale.Milliseconds;
+
 	var track_shell = createCommonjsModule(function (module, exports) {
 	// Copyright (C) 2018 The Android Open Source Project
 	//
@@ -9857,19 +10127,17 @@ var perfetto = (function (exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 
 	exports.TrackShell = {
-	    view({ attrs }) {
-	        return mithril('.trackshell', {
-	            style: {
-	                border: '1px solid #666',
-	            }
-	        }, mithril('.shell-content', {
+	    view({ attrs, children }) {
+	        return mithril('.trackshell', { style: { border: '1px solid #666', position: 'relative' } }, mithril('.shell-content', {
 	            style: {
 	                background: '#fff',
 	                padding: '20px',
-	                width: '20%',
+	                width: '200px',
 	                'border-right': '1px solid #666'
 	            }
-	        }, mithril('h1', { style: { margin: 0, 'font-size': '1.5em' } }, attrs.name)));
+	        }, mithril('h1', { style: { margin: 0, 'font-size': '1.5em' } }, attrs.name)), mithril('.track-content', {
+	            style: { width: '80%', position: 'absolute', left: '200px', top: '0' }
+	        }, children));
 	    }
 	};
 
@@ -9897,11 +10165,23 @@ var perfetto = (function (exports) {
 
 	exports.Track = {
 	    view({ attrs }) {
-	        attrs.trackContext.fillStyle = '#ccc';
-	        attrs.trackContext.fillRect(0, 0, 1000, 73);
-	        attrs.trackContext.font = '16px Arial';
-	        attrs.trackContext.fillStyle = '#000';
-	        attrs.trackContext.fillText(attrs.name + ' rendered by canvas', 500, 20);
+	        const sliceStart = 100000;
+	        const sliceEnd = 400000;
+	        const rectStart = attrs.timeScale.msToPx(sliceStart);
+	        const rectWidth = attrs.timeScale.msToPx(sliceEnd) - rectStart;
+	        const shownStart = rectStart > attrs.width ? attrs.width : rectStart;
+	        const shownWidth = rectWidth + rectStart > attrs.width ?
+	            attrs.width :
+	            rectWidth;
+	        if (attrs.trackContext.isOnCanvas()) {
+	            attrs.trackContext.fillStyle = '#ccc';
+	            attrs.trackContext.fillRect(0, 0, attrs.width, 73);
+	            attrs.trackContext.fillStyle = '#c00';
+	            attrs.trackContext.fillRect(shownStart, 40, shownWidth, 30);
+	            attrs.trackContext.font = '16px Arial';
+	            attrs.trackContext.fillStyle = '#000';
+	            attrs.trackContext.fillText(attrs.name + ' rendered by canvas', shownStart, 60);
+	        }
 	        return mithril('.track', {
 	            style: {
 	                position: 'absolute',
@@ -9909,7 +10189,15 @@ var perfetto = (function (exports) {
 	                left: 0,
 	                width: '100%'
 	            }
-	        }, mithril(track_shell.TrackShell, attrs));
+	        }, mithril(track_shell.TrackShell, attrs, mithril('.marker', {
+	            style: {
+	                'font-size': '1.5em',
+	                position: 'absolute',
+	                left: rectStart.toString() + 'px',
+	                width: rectWidth.toString() + 'px',
+	                background: '#aca'
+	            }
+	        }, attrs.name + ' DOM Content')));
 	    }
 	};
 
@@ -9945,17 +10233,42 @@ var perfetto = (function (exports) {
 
 
 
+
 	exports.Frontend = {
 	    oninit() {
-	        this.width = 1000;
-	        this.height = 400;
-	        this.canvasController = new canvas_controller.CanvasController(this.width, this.height);
+	        this.width = 0;
+	        this.height = 0;
+	        this.canvasController = new canvas_controller.CanvasController();
+	    },
+	    oncreate(vnode) {
+	        this.onResize = () => {
+	            const rect = vnode.dom.getBoundingClientRect();
+	            this.width = rect.width;
+	            this.height = rect.height;
+	            this.canvasController.setDimensions(this.width, this.height);
+	            mithril.redraw();
+	        };
+	        // Have to redraw after initialization to provide dimensions to view().
+	        setTimeout(() => this.onResize());
+	        // Once ResizeObservers are out, we can stop accessing the window here.
+	        window.addEventListener('resize', this.onResize);
+	    },
+	    onremove() {
+	        window.removeEventListener('resize', this.onResize);
 	    },
 	    view({}) {
 	        const canvasTopOffset = this.canvasController.getCanvasTopOffset();
 	        const ctx = this.canvasController.getContext();
+	        const timeScale = new time_scale.TimeScale([0, 1000000], [0, 1000]);
 	        this.canvasController.clear();
-	        return mithril('.frontend', { style: { position: 'relative', width: this.width.toString() + 'px' } }, mithril(scrollable_container.ScrollableContainer, {
+	        return mithril('.frontend', {
+	            style: {
+	                position: 'relative',
+	                width: '100%',
+	                height: 'calc(100% - 105px)',
+	                overflow: 'hidden'
+	            }
+	        }, mithril(scrollable_container.ScrollableContainer, {
 	            width: this.width,
 	            height: this.height,
 	            contentHeight: 1000,
@@ -9968,44 +10281,64 @@ var perfetto = (function (exports) {
 	            canvasElement: this.canvasController.getCanvasElement()
 	        }), mithril(track.Track, {
 	            name: 'Track 1',
-	            trackContext: new track_canvas_context.TrackCanvasContext(ctx, { top: 0, left: 0, width: this.width, height: 90 }),
-	            top: 0
+	            trackContext: new child_virtual_context.ChildVirtualContext(ctx, { y: 0, x: 0, width: this.width, height: 90 }),
+	            top: 0,
+	            width: this.width,
+	            timeScale
 	        }), mithril(track.Track, {
 	            name: 'Track 2',
-	            trackContext: new track_canvas_context.TrackCanvasContext(ctx, { top: 100, left: 0, width: this.width, height: 90 }),
-	            top: 100
+	            trackContext: new child_virtual_context.ChildVirtualContext(ctx, { y: 100, x: 0, width: this.width, height: 90 }),
+	            top: 100,
+	            width: this.width,
+	            timeScale
 	        }), mithril(track.Track, {
 	            name: 'Track 3',
-	            trackContext: new track_canvas_context.TrackCanvasContext(ctx, { top: 200, left: 0, width: this.width, height: 90 }),
-	            top: 200
+	            trackContext: new child_virtual_context.ChildVirtualContext(ctx, { y: 200, x: 0, width: this.width, height: 90 }),
+	            top: 200,
+	            width: this.width,
+	            timeScale
 	        }), mithril(track.Track, {
 	            name: 'Track 4',
-	            trackContext: new track_canvas_context.TrackCanvasContext(ctx, { top: 300, left: 0, width: this.width, height: 90 }),
-	            top: 300
+	            trackContext: new child_virtual_context.ChildVirtualContext(ctx, { y: 300, x: 0, width: this.width, height: 90 }),
+	            top: 300,
+	            width: this.width,
+	            timeScale
 	        }), mithril(track.Track, {
 	            name: 'Track 5',
-	            trackContext: new track_canvas_context.TrackCanvasContext(ctx, { top: 400, left: 0, width: this.width, height: 90 }),
-	            top: 400
+	            trackContext: new child_virtual_context.ChildVirtualContext(ctx, { y: 400, x: 0, width: this.width, height: 90 }),
+	            top: 400,
+	            width: this.width,
+	            timeScale
 	        }), mithril(track.Track, {
 	            name: 'Track 6',
-	            trackContext: new track_canvas_context.TrackCanvasContext(ctx, { top: 500, left: 0, width: this.width, height: 90 }),
-	            top: 500
+	            trackContext: new child_virtual_context.ChildVirtualContext(ctx, { y: 500, x: 0, width: this.width, height: 90 }),
+	            top: 500,
+	            width: this.width,
+	            timeScale
 	        }), mithril(track.Track, {
 	            name: 'Track 7',
-	            trackContext: new track_canvas_context.TrackCanvasContext(ctx, { top: 600, left: 0, width: this.width, height: 90 }),
-	            top: 600
+	            trackContext: new child_virtual_context.ChildVirtualContext(ctx, { y: 600, x: 0, width: this.width, height: 90 }),
+	            top: 600,
+	            width: this.width,
+	            timeScale
 	        }), mithril(track.Track, {
 	            name: 'Track 8',
-	            trackContext: new track_canvas_context.TrackCanvasContext(ctx, { top: 700, left: 0, width: this.width, height: 90 }),
-	            top: 700
+	            trackContext: new child_virtual_context.ChildVirtualContext(ctx, { y: 700, x: 0, width: this.width, height: 90 }),
+	            top: 700,
+	            width: this.width,
+	            timeScale
 	        }), mithril(track.Track, {
 	            name: 'Track 9',
-	            trackContext: new track_canvas_context.TrackCanvasContext(ctx, { top: 800, left: 0, width: this.width, height: 90 }),
-	            top: 800
+	            trackContext: new child_virtual_context.ChildVirtualContext(ctx, { y: 800, x: 0, width: this.width, height: 90 }),
+	            top: 800,
+	            width: this.width,
+	            timeScale
 	        }), mithril(track.Track, {
 	            name: 'Track 10',
-	            trackContext: new track_canvas_context.TrackCanvasContext(ctx, { top: 900, left: 0, width: this.width, height: 90 }),
-	            top: 900
+	            trackContext: new child_virtual_context.ChildVirtualContext(ctx, { y: 900, x: 0, width: this.width, height: 90 }),
+	            top: 900,
+	            width: this.width,
+	            timeScale
 	        })));
 	    },
 	};
@@ -10019,10 +10352,17 @@ var perfetto = (function (exports) {
 	    worker.onerror = e => {
 	        console.error(e);
 	    };
+	    worker.onmessage = msg => {
+	        globals.globals.state = msg.data;
+	        mithril.redraw();
+	    };
+	    return worker;
 	}
 	function main() {
-	    globals.gState.set(state.createEmptyState());
-	    createController();
+	    globals.globals.state = state.createEmptyState();
+	    const worker = createController();
+	    // tslint:disable-next-line deprecation
+	    globals.globals.dispatch = action => worker.postMessage(action);
 	    wasm_engine_proxy.warmupWasmEngineWorker();
 	    const root = document.getElementById('frontend');
 	    if (!root) {

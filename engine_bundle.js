@@ -1425,7 +1425,7 @@ var perfetto = (function () {
 
 	STATIC_BASE = GLOBAL_BASE;
 
-	STATICTOP = STATIC_BASE + 52944;
+	STATICTOP = STATIC_BASE + 54048;
 	/* global initializers */  __ATINIT__.push({ func: function() { __GLOBAL__sub_I_status_cc(); } });
 
 
@@ -1434,7 +1434,7 @@ var perfetto = (function () {
 
 
 
-	var STATIC_BUMP = 52944;
+	var STATIC_BUMP = 54048;
 	Module["STATIC_BASE"] = STATIC_BASE;
 	Module["STATIC_BUMP"] = STATIC_BUMP;
 
@@ -4511,6 +4511,126 @@ var perfetto = (function () {
 	  return real___ZNSt3__220__shared_ptr_pointerIPPN8perfetto15trace_processor13TraceDatabaseENS_14default_deleteIS4_EENS_9allocatorIS4_EEED2Ev.apply(null, arguments);
 	};
 
+	var real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc = asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc"]; asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__18__invokeEP12sqlite3_vtabP18sqlite3_index_info = asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__18__invokeEP12sqlite3_vtabP18sqlite3_index_info"]; asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__18__invokeEP12sqlite3_vtabP18sqlite3_index_info"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__18__invokeEP12sqlite3_vtabP18sqlite3_index_info.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__28__invokeEP12sqlite3_vtab = asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__28__invokeEP12sqlite3_vtab"]; asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__28__invokeEP12sqlite3_vtab"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__28__invokeEP12sqlite3_vtab.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__38__invokeEP12sqlite3_vtabPP19sqlite3_vtab_cursor = asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__38__invokeEP12sqlite3_vtabPP19sqlite3_vtab_cursor"]; asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__38__invokeEP12sqlite3_vtabPP19sqlite3_vtab_cursor"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__38__invokeEP12sqlite3_vtabPP19sqlite3_vtab_cursor.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__48__invokeEP19sqlite3_vtab_cursor = asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__48__invokeEP19sqlite3_vtab_cursor"]; asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__48__invokeEP19sqlite3_vtab_cursor"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__48__invokeEP19sqlite3_vtab_cursor.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__58__invokeEP19sqlite3_vtab_cursoriPKciPP13sqlite3_value = asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__58__invokeEP19sqlite3_vtab_cursoriPKciPP13sqlite3_value"]; asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__58__invokeEP19sqlite3_vtab_cursoriPKciPP13sqlite3_value"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__58__invokeEP19sqlite3_vtab_cursoriPKciPP13sqlite3_value.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__68__invokeEP19sqlite3_vtab_cursor = asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__68__invokeEP19sqlite3_vtab_cursor"]; asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__68__invokeEP19sqlite3_vtab_cursor"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__68__invokeEP19sqlite3_vtab_cursor.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__78__invokeEP19sqlite3_vtab_cursor = asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__78__invokeEP19sqlite3_vtab_cursor"]; asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__78__invokeEP19sqlite3_vtab_cursor"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__78__invokeEP19sqlite3_vtab_cursor.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__88__invokeEP19sqlite3_vtab_cursorP15sqlite3_contexti = asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__88__invokeEP19sqlite3_vtab_cursorP15sqlite3_contexti"]; asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__88__invokeEP19sqlite3_vtab_cursorP15sqlite3_contexti"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__88__invokeEP19sqlite3_vtab_cursorP15sqlite3_contexti.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__98__invokeEP19sqlite3_vtab_cursorPx = asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__98__invokeEP19sqlite3_vtab_cursorPx"]; asm["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__98__invokeEP19sqlite3_vtab_cursorPx"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__98__invokeEP19sqlite3_vtab_cursorPx.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc = asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc"]; asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__18__invokeEP12sqlite3_vtabP18sqlite3_index_info = asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__18__invokeEP12sqlite3_vtabP18sqlite3_index_info"]; asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__18__invokeEP12sqlite3_vtabP18sqlite3_index_info"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__18__invokeEP12sqlite3_vtabP18sqlite3_index_info.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__28__invokeEP12sqlite3_vtab = asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__28__invokeEP12sqlite3_vtab"]; asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__28__invokeEP12sqlite3_vtab"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__28__invokeEP12sqlite3_vtab.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__38__invokeEP12sqlite3_vtabPP19sqlite3_vtab_cursor = asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__38__invokeEP12sqlite3_vtabPP19sqlite3_vtab_cursor"]; asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__38__invokeEP12sqlite3_vtabPP19sqlite3_vtab_cursor"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__38__invokeEP12sqlite3_vtabPP19sqlite3_vtab_cursor.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__48__invokeEP19sqlite3_vtab_cursor = asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__48__invokeEP19sqlite3_vtab_cursor"]; asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__48__invokeEP19sqlite3_vtab_cursor"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__48__invokeEP19sqlite3_vtab_cursor.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__58__invokeEP19sqlite3_vtab_cursoriPKciPP13sqlite3_value = asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__58__invokeEP19sqlite3_vtab_cursoriPKciPP13sqlite3_value"]; asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__58__invokeEP19sqlite3_vtab_cursoriPKciPP13sqlite3_value"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__58__invokeEP19sqlite3_vtab_cursoriPKciPP13sqlite3_value.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__68__invokeEP19sqlite3_vtab_cursor = asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__68__invokeEP19sqlite3_vtab_cursor"]; asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__68__invokeEP19sqlite3_vtab_cursor"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__68__invokeEP19sqlite3_vtab_cursor.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__78__invokeEP19sqlite3_vtab_cursor = asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__78__invokeEP19sqlite3_vtab_cursor"]; asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__78__invokeEP19sqlite3_vtab_cursor"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__78__invokeEP19sqlite3_vtab_cursor.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__88__invokeEP19sqlite3_vtab_cursorP15sqlite3_contexti = asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__88__invokeEP19sqlite3_vtab_cursorP15sqlite3_contexti"]; asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__88__invokeEP19sqlite3_vtab_cursorP15sqlite3_contexti"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__88__invokeEP19sqlite3_vtab_cursorP15sqlite3_contexti.apply(null, arguments);
+	};
+
+	var real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__98__invokeEP19sqlite3_vtab_cursorPx = asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__98__invokeEP19sqlite3_vtab_cursorPx"]; asm["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__98__invokeEP19sqlite3_vtab_cursorPx"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return real___ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__98__invokeEP19sqlite3_vtab_cursorPx.apply(null, arguments);
+	};
+
 	var real___ZZN8perfetto15trace_processor15SchedSliceTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc = asm["__ZZN8perfetto15trace_processor15SchedSliceTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc"]; asm["__ZZN8perfetto15trace_processor15SchedSliceTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc"] = function() {
 	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
 	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
@@ -6679,6 +6799,86 @@ var perfetto = (function () {
 	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
 	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
 	  return Module["asm"]["__ZNSt3__220__shared_ptr_pointerIPPN8perfetto15trace_processor13TraceDatabaseENS_14default_deleteIS4_EENS_9allocatorIS4_EEED2Ev"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc = Module["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__18__invokeEP12sqlite3_vtabP18sqlite3_index_info = Module["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__18__invokeEP12sqlite3_vtabP18sqlite3_index_info"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__18__invokeEP12sqlite3_vtabP18sqlite3_index_info"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__28__invokeEP12sqlite3_vtab = Module["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__28__invokeEP12sqlite3_vtab"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__28__invokeEP12sqlite3_vtab"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__38__invokeEP12sqlite3_vtabPP19sqlite3_vtab_cursor = Module["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__38__invokeEP12sqlite3_vtabPP19sqlite3_vtab_cursor"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__38__invokeEP12sqlite3_vtabPP19sqlite3_vtab_cursor"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__48__invokeEP19sqlite3_vtab_cursor = Module["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__48__invokeEP19sqlite3_vtab_cursor"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__48__invokeEP19sqlite3_vtab_cursor"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__58__invokeEP19sqlite3_vtab_cursoriPKciPP13sqlite3_value = Module["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__58__invokeEP19sqlite3_vtab_cursoriPKciPP13sqlite3_value"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__58__invokeEP19sqlite3_vtab_cursoriPKciPP13sqlite3_value"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__68__invokeEP19sqlite3_vtab_cursor = Module["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__68__invokeEP19sqlite3_vtab_cursor"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__68__invokeEP19sqlite3_vtab_cursor"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__78__invokeEP19sqlite3_vtab_cursor = Module["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__78__invokeEP19sqlite3_vtab_cursor"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__78__invokeEP19sqlite3_vtab_cursor"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__88__invokeEP19sqlite3_vtab_cursorP15sqlite3_contexti = Module["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__88__invokeEP19sqlite3_vtab_cursorP15sqlite3_contexti"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__88__invokeEP19sqlite3_vtab_cursorP15sqlite3_contexti"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__98__invokeEP19sqlite3_vtab_cursorPx = Module["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__98__invokeEP19sqlite3_vtab_cursorPx"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor11ThreadTable12CreateModuleEvEN3__98__invokeEP19sqlite3_vtab_cursorPx"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc = Module["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__18__invokeEP12sqlite3_vtabP18sqlite3_index_info = Module["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__18__invokeEP12sqlite3_vtabP18sqlite3_index_info"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__18__invokeEP12sqlite3_vtabP18sqlite3_index_info"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__28__invokeEP12sqlite3_vtab = Module["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__28__invokeEP12sqlite3_vtab"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__28__invokeEP12sqlite3_vtab"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__38__invokeEP12sqlite3_vtabPP19sqlite3_vtab_cursor = Module["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__38__invokeEP12sqlite3_vtabPP19sqlite3_vtab_cursor"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__38__invokeEP12sqlite3_vtabPP19sqlite3_vtab_cursor"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__48__invokeEP19sqlite3_vtab_cursor = Module["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__48__invokeEP19sqlite3_vtab_cursor"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__48__invokeEP19sqlite3_vtab_cursor"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__58__invokeEP19sqlite3_vtab_cursoriPKciPP13sqlite3_value = Module["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__58__invokeEP19sqlite3_vtab_cursoriPKciPP13sqlite3_value"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__58__invokeEP19sqlite3_vtab_cursoriPKciPP13sqlite3_value"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__68__invokeEP19sqlite3_vtab_cursor = Module["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__68__invokeEP19sqlite3_vtab_cursor"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__68__invokeEP19sqlite3_vtab_cursor"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__78__invokeEP19sqlite3_vtab_cursor = Module["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__78__invokeEP19sqlite3_vtab_cursor"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__78__invokeEP19sqlite3_vtab_cursor"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__88__invokeEP19sqlite3_vtab_cursorP15sqlite3_contexti = Module["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__88__invokeEP19sqlite3_vtab_cursorP15sqlite3_contexti"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__88__invokeEP19sqlite3_vtab_cursorP15sqlite3_contexti"].apply(null, arguments) };
+	var __ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__98__invokeEP19sqlite3_vtab_cursorPx = Module["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__98__invokeEP19sqlite3_vtab_cursorPx"] = function() {
+	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+	  return Module["asm"]["__ZZN8perfetto15trace_processor12ProcessTable12CreateModuleEvEN3__98__invokeEP19sqlite3_vtab_cursorPx"].apply(null, arguments) };
 	var __ZZN8perfetto15trace_processor15SchedSliceTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc = Module["__ZZN8perfetto15trace_processor15SchedSliceTable12CreateModuleEvEN3__08__invokeEP7sqlite3PviPKPKcPP12sqlite3_vtabPPc"] = function() {
 	  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
 	  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
@@ -8297,7 +8497,7 @@ var perfetto = (function () {
 	        this.fileReader = fileReader;
 	        this.callback = callback;
 	        this.blob = null;
-	        this.alive = true;
+	        this.aborted = false;
 	        this.outstandingRequests = new Set();
 	        this.connection = init({
 	            locateFile: (s) => s,
@@ -8308,7 +8508,7 @@ var perfetto = (function () {
 	        });
 	    }
 	    onAbort() {
-	        console.error('Abort!');
+	        this.aborted = true;
 	        for (const id of this.outstandingRequests) {
 	            this.abortRequest(id);
 	        }
@@ -8360,8 +8560,10 @@ var perfetto = (function () {
 	    callWasm(req) {
 	        return tslib_es6.__awaiter(this, void 0, void 0, function* () {
 	            yield this.deferredReady;
-	            if (!this.alive)
+	            if (this.aborted) {
 	                this.abortRequest(req.id);
+	                return;
+	            }
 	            this.outstandingRequests.add(req.id);
 	            this.connection.ccall(`${req.serviceName}_${req.methodName}`, // C method name.
 	            'void', // Return type.
